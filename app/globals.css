@@ -566,7 +566,7 @@ footer span {
 .renter .sidebar {
   background: none;
   border: 0;
-  padding: 25px 24px 5px;
+  padding: 14px 24px 2px;
 }
 .renter .brand {
   font-size: 15px;
@@ -622,7 +622,7 @@ footer span {
   font-size: 8px;
 }
 .renter .workspace {
-  padding: 25px 24px 85px;
+  padding: 12px 24px 85px;
 }
 .renter .page-head {
   margin-bottom: 26px;
@@ -974,7 +974,7 @@ dd {
     gap: 0;
   }
   .renter .workspace {
-    padding-top: 21px;
+    padding-top: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

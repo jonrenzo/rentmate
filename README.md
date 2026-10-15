@@ -1,6 +1,6 @@
 # Rentmate
 
-One-owner rental ledger and renter portal. The browser-local demo is separate from live accounts. Rent is stored in integer PHP centavos; billing dates use Asia/Manila. Renter payments require owner verification. Recording a payment or refund never moves money.
+One-owner rental ledger and renter portal. Rent is stored in integer PHP centavos; billing dates use Asia/Manila. Renter payments require owner verification. Recording a payment or refund never moves money.
 
 ## Run locally
 
@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:3000 and choose the demo. Live sign-in returns a setup message until environment variables are configured; it never substitutes demo records. Demo data is synthetic and stays in this browser.
+Open http://127.0.0.1:3000 and sign in. Until environment variables are configured the app shows a setup message instead of the login form.
 
 ## Set up a dedicated Supabase project
 

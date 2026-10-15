@@ -14,5 +14,5 @@ export async function GET() { return route(async()=>{
  for(const t of data.tenancies as {first_bill_month:string}[]) t.first_bill_month=t.first_bill_month.slice(0,7);
  for(const b of data.bills as {period:string}[]) b.period=b.period.slice(0,7);
  const settings=(data.settings as Record<string,unknown>[])[0]; if(settings) delete settings.id;
- return {...data,settings,viewer:profile,today:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Manila',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()),demo:false};
+ return {...data,settings,viewer:profile,today:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Manila',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())};
  }); }

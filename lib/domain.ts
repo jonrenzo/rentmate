@@ -87,7 +87,7 @@ export function applyAction(state: AppState, action: Action): AppState {
       const b=payable(action.bill_id); date(action.received_on); requireValue(action.received_on<=s.today,'Payment date cannot be in the future.');
       requireValue(action.reference.length<=200&&action.note.length<=2000,'Payment details are too long.');
       if(action.type==='payment.submit') {
-        requireValue(actor.role==='renter'&&b.renter_id===actor.id,'You can only submit your own payment.'); requireValue(['gcash','bank'].includes(action.method),'Choose GCash or bank.'); required(action.reference,'Reference'); if(action.proof_path.startsWith('data:')) { requireValue(s.demo && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(action.proof_path) && action.proof_path.length<=1572864,'Use a PNG, JPEG or WebP demo image under 1 MB.'); } else required(action.proof_path,'Payment proof',1024);
+        requireValue(actor.role==='renter'&&b.renter_id===actor.id,'You can only submit your own payment.'); requireValue(['gcash','bank'].includes(action.method),'Choose GCash or bank.'); required(action.reference,'Reference'); requireValue(!action.proof_path.startsWith('data:'),'Upload the proof image instead of pasting its data.'); required(action.proof_path,'Payment proof',1024);
         settle(b,action.method,action.received_on,action.reference,action.note,action.proof_path,true);
       } else {requireValue(['cash','gcash','bank'].includes(action.method),'Invalid payment method.'); settle(b,action.method,action.received_on,action.reference,action.note);}
       break;

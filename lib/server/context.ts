@@ -7,7 +7,7 @@ import { ApiError } from './validation';
 import type { Profile } from '../types';
 export function env() {
  const url=process.env.SUPABASE_URL, key=process.env.SUPABASE_PUBLISHABLE_KEY, secret=process.env.SUPABASE_SERVICE_ROLE_KEY;
- if (!url || !key || !secret) throw new ApiError(503,'Live mode is not configured. Use the separate demo or configure Supabase.');
+ if (!url || !key || !secret) throw new ApiError(503,'Live mode is not configured. Configure the Supabase environment variables.');
  return {url,key,secret};
 }
 export function admin() { const {url,secret}=env(); return createClient(url,secret,{auth:{persistSession:false,autoRefreshToken:false}}); }

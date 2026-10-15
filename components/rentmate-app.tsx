@@ -28,17 +28,12 @@ import type {
   Tenancy,
 } from "@/lib/types";
 import {
-  applyAction,
   billStatus,
-  generateBills,
   money,
   monthLabel,
-  filterForViewer,
 } from "@/lib/domain";
-import { createDemoState } from "@/lib/demo";
 import { pesos } from "@/lib/input";
 import { FormDialog, type FormSpec, type Field, str } from "./forms";
-const KEY = "rentmate-demo-v1";
 async function request(url: string, body?: unknown): Promise<any> {
   const response = await fetch(url, {
     method: body ? "POST" : "GET",
@@ -66,9 +61,8 @@ const initials = (name: string) =>
     .map((n) => n[0])
     .slice(0, 2)
     .join("");
-export default function RentmateApp({ demo = false }: { demo?: boolean }) {
+export default function RentmateApp() {
   const [state, setState] = useState<AppState | null>(null),
-    [source, setSource] = useState<AppState | null>(null),
     [page, setPage] = useState("Overview"),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
@@ -78,13 +72,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
     [modal, setModal] = useState<FormSpec | null>(null),
     [month, setMonth] = useState(""),
     [install, setInstall] = useState<any>(null);
-  function useDemo(next: AppState, viewer = next.viewer.id) {
-    const visible = filterForViewer(next, viewer);
-    const stored = { ...next, viewer: visible.viewer };
-    localStorage.setItem(KEY, JSON.stringify(stored));
-    setSource(stored);
-    setState(visible);
-  }
   async function refresh() {
     try {
       setState(await request("/api/state"));
@@ -103,15 +90,7 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
     }
   }
   useEffect(() => {
-    if (demo) {
-      try {
-        const saved = localStorage.getItem(KEY);
-        setSource(generateBills(saved ? JSON.parse(saved) : createDemoState()));
-      } catch {
-        setSource(createDemoState());
-      }
-      setLoading(false);
-    } else void refresh();
+    void refresh();
     if ("serviceWorker" in navigator)
       void navigator.serviceWorker.register("/sw.js").catch(() => {});
     const handler = (e: Event) => {
@@ -120,19 +99,8 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
     };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, [demo]);
+  }, []);
   async function act(action: Action): Promise<ActionResult> {
-    if (demo && source && state) {
-      const next = applyAction({ ...source, viewer: state.viewer }, action);
-      useDemo(next, state.viewer.id);
-      setNotice("Demo updated. No real money has moved.");
-      return {
-        ok: true,
-        ...(["renter.create", "password.reset"].includes(action.type)
-          ? { temporary_password: "Demo-only-password" }
-          : {}),
-      };
-    }
     const result = await request("/api/actions", action);
     await refresh();
     setNotice("Saved successfully.");
@@ -162,9 +130,7 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
   function changePassword() {
     setModal({
       title: "Change password",
-      description: demo
-        ? "Demo only. Real passwords are managed in the connected app."
-        : "Choose a new password with at least 12 characters.",
+      description: "Choose a new password with at least 12 characters.",
       fields: [
         { name: "password", label: "New password", type: "password" },
         { name: "confirm", label: "Confirm password", type: "password" },
@@ -174,59 +140,13 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
           throw Error("Use at least 12 characters.");
         if (str(d, "password") !== str(d, "confirm"))
           throw Error("Passwords do not match.");
-        if (demo) {
-          if (source && state) {
-            const next = {
-              ...source,
-              profiles: source.profiles.map((p) =>
-                p.id === state.viewer.id
-                  ? { ...p, must_change_password: false }
-                  : p,
-              ),
-              viewer: { ...state.viewer, must_change_password: false },
-            };
-            useDemo(next);
-          }
-        } else {
-          await request("/api/auth/password", { password: str(d, "password") });
-          await refresh();
-        }
+        await request("/api/auth/password", { password: str(d, "password") });
+        await refresh();
         setNotice("Password changed.");
       },
     });
   }
   async function upload(data: FormData) {
-    if (demo) {
-      if (!state || !source) return;
-      const file = data.get("file") as File;
-      if (!file?.size) throw Error("Choose an image.");
-      if (file.size > 1024 * 1024)
-        throw Error(
-          "Demo images must be under 1 MB. Live uploads support 4 MB.",
-        );
-      const path = await new Promise<string>((resolve, reject) => {
-        const r = new FileReader();
-        r.onload = () => resolve(String(r.result));
-        r.onerror = reject;
-        r.readAsDataURL(file);
-      });
-      if (data.get("kind") === "qr") {
-        useDemo(
-          { ...source, settings: { ...source.settings, gcash_qr_path: path } },
-          state.viewer.id,
-        );
-      } else
-        await act({
-          type: "payment.submit",
-          bill_id: str(data, "bill_id"),
-          method: str(data, "method") as "gcash" | "bank",
-          received_on: str(data, "received_on"),
-          reference: str(data, "reference"),
-          note: str(data, "note"),
-          proof_path: path,
-        });
-      return;
-    }
     const response = await fetch("/api/upload", { method: "POST", body: data });
     const result = await response.json();
     if (!response.ok) throw Error(result.error);
@@ -234,7 +154,7 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
     setNotice("Upload saved.");
   }
   function imagePath(path: string) {
-    return demo ? path : `/api/file?path=${encodeURIComponent(path)}`;
+    return `/api/file?path=${encodeURIComponent(path)}`;
   }
   if (loading)
     return (
@@ -247,37 +167,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
       </main>
     );
   const needsPassword = passwordGate || state?.viewer.must_change_password;
-  if (demo && !state && source)
-    return (
-      <main className="login">
-        <div className="login-card">
-          <div className="brand"><img className="mark" src="/rentmate-logo.png" alt="" width={40} height={40} />Rentmate</div>
-          <h1>Welcome home.</h1>
-          <p className="muted">Choose an account to explore. These are demo accounts; no password is needed.</p>
-          <form onSubmit={e => {
-            e.preventDefault();
-            const id = str(new FormData(e.currentTarget), "account");
-            try {
-              useDemo(source, id);
-              setPage("Overview");
-              setNotice("");
-              setError("");
-              setPasswordGate(false);
-            } catch (e) { setError(e instanceof Error ? e.message : "Unable to open account."); }
-          }}>
-            <label className="field">Demo account
-              <select name="account" defaultValue="sofia-demo" required>
-                {source.profiles.map(profile => <option key={profile.id} value={profile.id}>{profile.full_name} · {profile.role === "owner" ? "Owner" : "Renter"}</option>)}
-              </select>
-            </label>
-            {error && <p className="error" role="alert">{error}</p>}
-            <button className="button primary full" type="submit">Sign in to demo <ArrowUpRight size={16}/></button>
-          </form>
-          <p className="fine">Sign out to try another account. Your demo changes stay saved in this browser.</p>
-          <a className="demo-link" href="/">Live account sign-in</a>
-        </div>
-      </main>
-    );
   if (!state || needsPassword)
     return (
       <main className="login">
@@ -291,7 +180,7 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
             {needsPassword
               ? "Set your own password before opening your account."
               : setup
-                ? "Your app is ready for a dedicated Supabase connection. Explore the working demo while you set it up."
+                ? "Connect your Supabase project to sign in."
                 : "Your rent, all in one place."}
           </p>
           {needsPassword ? (
@@ -347,9 +236,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
               {error}
             </p>
           )}
-          <a className="demo-link" href="/demo">
-            Explore the demo <ArrowUpRight size={14} />
-          </a>
           <p className="fine">
             Forgot your password? Ask the owner for a new temporary password.
           </p>
@@ -837,15 +723,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
             className="icon-button"
             aria-label="Sign out"
             onClick={async () => {
-              if (demo) {
-                setState(null);
-                setPage("Overview");
-                setNotice("");
-                setError("");
-                setModal(null);
-                setPasswordGate(false);
-                return;
-              }
               try {
                 await request("/api/auth/logout", {});
                 setState(null);
@@ -854,7 +731,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
                 setModal(null);
                 setPage("Overview");
                 setPasswordGate(false);
-                setSource(null);
               } catch (e: any) {
                 setError(e.message);
               }
@@ -1438,14 +1314,6 @@ export default function RentmateApp({ demo = false }: { demo?: boolean }) {
             </section>
             <section className="panel detail-card">
               <h2>Security & app</h2>
-              {demo && <button className="text-button" onClick={() => {
-                setState(null);
-                setNotice("");
-                setError("");
-                setPage("Overview");
-                setModal(null);
-                setPasswordGate(false);
-              }}>Switch demo account</button>}
               <p className="muted">
                 Internet is required to access your records.
               </p>

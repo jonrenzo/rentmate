@@ -711,14 +711,6 @@ footer span {
   font-size: 13px;
   margin-bottom: 25px;
 }
-.demo-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 24px;
-  font-size: 12px;
-}
 .login .fine {
   text-align: center;
   font-size: 10px;

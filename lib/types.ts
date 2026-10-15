@@ -6,7 +6,7 @@ export type Bill = { id: string; tenancy_id: string; renter_id: string; period: 
 export type Payment = { id: string; bill_id: string; renter_id: string; amount: number; method: 'cash' | 'gcash' | 'bank' | 'deposit'; status: 'pending' | 'approved' | 'rejected' | 'reversed'; reference: string; proof_path: string | null; received_on: string; submitted_at: string; reviewed_at: string | null; note: string };
 export type FundEvent = { id: string; tenancy_id: string; kind: 'advance_received' | 'deposit_received' | 'advance_refunded' | 'deposit_refunded' | 'deposit_applied'; amount: number; date: string; note: string };
 export type Settings = { property_name: string; gcash_name: string; gcash_number: string; gcash_qr_path: string | null; bank_details: string };
-export type AppState = { viewer: Profile; profiles: Profile[]; rooms: Room[]; tenancies: Tenancy[]; bills: Bill[]; payments: Payment[]; fund_events: FundEvent[]; settings: Settings; today: string; demo: boolean };
+export type AppState = { viewer: Profile; profiles: Profile[]; rooms: Room[]; tenancies: Tenancy[]; bills: Bill[]; payments: Payment[]; fund_events: FundEvent[]; settings: Settings; today: string };
 export type Action =
  | { type: 'room.save'; id?: string; name: string; capacity: number; notes: string }
  | { type: 'renter.create'; username: string; full_name: string; phone: string; room_id: string; monthly_rent: number; due_day: number; start_date: string; first_bill_month: string; advance_received: boolean; deposit_received: boolean }

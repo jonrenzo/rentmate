@@ -623,6 +623,8 @@ footer span {
 }
 .renter .workspace {
   padding: 12px 24px 85px;
+  height: auto;
+  overflow: visible;
 }
 .renter .page-head {
   margin-bottom: 26px;

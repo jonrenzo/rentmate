@@ -747,11 +747,11 @@ export default function RentmateApp() {
               {owner ? "YOUR PROPERTY, AT A GLANCE" : roomName(view.viewer.id)}
             </p>
             <h1>
-              {selected === "Home"
-                ? `Hi, ${view.viewer.full_name.split(" ")[0]}.`
-                : selected === "Overview"
-                  ? "A little more clarity."
-                  : selected}
+              {selected === "Home" || selected === "Overview" ? (
+                <>Hello, <strong>{view.viewer.full_name.split(" ")[0]}</strong>.</>
+              ) : (
+                selected
+              )}
             </h1>
             <p className="muted">
               {selected === "Overview"
@@ -946,7 +946,7 @@ export default function RentmateApp() {
                   .map((t) => (
                     <p key={t.id}>
                       {name(t.renter_id)}{" "}
-                      <span className="muted">· {money(t.monthly_rent)}</span>
+                      <span className="muted">· <strong>{money(t.monthly_rent)}</strong></span>
                     </p>
                   ))}
                 <button className="button" onClick={() => editRoom(r)}>
@@ -981,7 +981,7 @@ export default function RentmateApp() {
                     {t && (
                       <>
                         <p>
-                          {roomName(p.id)} · {money(t.monthly_rent)} / month
+                          {roomName(p.id)} · <strong>{money(t.monthly_rent)}</strong> / month
                         </p>
                         <p className="fine">
                           Due day {t.due_day} · Moved in {date(t.start_date)}
@@ -1187,9 +1187,9 @@ export default function RentmateApp() {
               <p className="holding">
                 <ShieldCheck size={18} />
                 <span>
-                  Advance held: {money(mine.advance_held)}
+                  Advance held: <strong>{money(mine.advance_held)}</strong>
                   <br />
-                  Deposit held: {money(mine.deposit_held)}
+                  Deposit held: <strong>{money(mine.deposit_held)}</strong>
                 </span>
               </p>
             )}
@@ -1302,11 +1302,11 @@ export default function RentmateApp() {
                   {mine && (
                     <>
                       <dt>Monthly rent</dt>
-                      <dd>{money(mine.monthly_rent)}</dd>
+                      <dd><strong>{money(mine.monthly_rent)}</strong></dd>
                       <dt>Advance held</dt>
-                      <dd>{money(mine.advance_held)}</dd>
+                      <dd><strong>{money(mine.advance_held)}</strong></dd>
                       <dt>Deposit held</dt>
-                      <dd>{money(mine.deposit_held)}</dd>
+                      <dd><strong>{money(mine.deposit_held)}</strong></dd>
                     </>
                   )}
                 </dl>
@@ -1349,7 +1349,7 @@ export default function RentmateApp() {
                         {date(f.date)} · {f.note}
                       </small>
                     </div>
-                    {money(f.amount)}
+                    <strong>{money(f.amount)}</strong>
                   </div>
                 ))}
                 {!view.fund_events.length && (

@@ -122,7 +122,8 @@ small {
 .owner {
   display: grid;
   grid-template-columns: 224px minmax(0, 1fr);
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
 }
 .sidebar {
   background: #fbfbfc;
@@ -130,6 +131,10 @@ small {
   padding: 32px 18px 24px;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
 }
 .sidebar .brand,
 .sidebar .property {
@@ -201,8 +206,9 @@ small {
   max-width: 1500px;
   width: 100%;
   margin: auto;
-  align-self: start;
   min-width: 0;
+  height: 100dvh;
+  overflow-y: auto;
 }
 .page-head {
   display: flex;
@@ -452,7 +458,7 @@ td small {
 }
 .amount {
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  font-weight: 700;
 }
 .empty {
   padding: 35px 24px;
@@ -562,6 +568,16 @@ footer span {
   border: 0;
   padding: 25px 24px 5px;
 }
+.renter .brand {
+  font-size: 15px;
+  gap: 7px;
+  letter-spacing: -0.5px;
+}
+.renter .mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+}
 .renter .property {
   display: none;
 }
@@ -632,7 +648,7 @@ footer span {
 }
 .rent-amount {
   font-size: 48px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -1.8px;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
@@ -863,10 +879,17 @@ dd {
 @media (max-width: 700px) {
   .owner {
     display: block;
+    height: auto;
+    overflow: visible;
   }
   .owner .sidebar {
     padding: 18px 20px 8px;
     border: 0;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    height: auto;
+    overflow: visible;
   }
   .owner .property,
   .owner .sidebar-bottom {
@@ -889,6 +912,8 @@ dd {
   }
   .owner .workspace {
     padding: 24px 18px;
+    height: auto;
+    overflow: visible;
   }
   .page-head {
     align-items: flex-start;

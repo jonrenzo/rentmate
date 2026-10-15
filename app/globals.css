@@ -890,9 +890,20 @@ dd {
     height: auto;
     overflow: visible;
   }
+  .owner .sidebar {
+    position: relative;
+  }
   .owner .property,
-  .owner .sidebar-bottom {
+  .owner .sidebar-bottom > div,
+  .owner .sidebar-bottom > .avatar {
     display: none;
+  }
+  .owner .sidebar-bottom {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    margin: 0;
+    padding: 0;
   }
   .owner .sidebar nav {
     display: flex;

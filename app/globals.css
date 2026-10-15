@@ -878,16 +878,15 @@ dd {
 }
 @media (max-width: 700px) {
   .owner {
-    display: block;
-    height: auto;
-    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
   }
   .owner .sidebar {
     padding: 18px 20px 8px;
     border: 0;
-    position: sticky;
-    top: 0;
-    z-index: 5;
+    flex-shrink: 0;
     height: auto;
     overflow: visible;
   }
@@ -912,8 +911,10 @@ dd {
   }
   .owner .workspace {
     padding: 24px 18px;
+    flex: 1;
+    min-height: 0;
     height: auto;
-    overflow: visible;
+    overflow-y: auto;
   }
   .page-head {
     align-items: flex-start;

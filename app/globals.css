@@ -567,8 +567,15 @@ footer span {
   background: none;
   border: 0;
   padding: 14px 24px 2px;
+  position: relative;
+  height: auto;
+  overflow: visible;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 .renter .brand {
+  padding-left: 0;
   font-size: 15px;
   gap: 7px;
   letter-spacing: -0.5px;
@@ -582,9 +589,8 @@ footer span {
   display: none;
 }
 .renter .sidebar-bottom {
-  position: absolute;
-  top: 24px;
-  right: max(24px, calc((100vw - 490px) / 2));
+  position: static;
+  margin: 0;
   padding: 0;
 }
 .renter .sidebar-bottom > div,

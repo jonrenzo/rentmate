@@ -5,6 +5,10 @@ const config: NextConfig = {
   async headers() {
     return [
       {
+        source: "/rentmate-:asset([a-z0-9-]+)-v1.:ext(webp|png)",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
         source: "/api/:path*",
         headers: [
           { key: "Cache-Control", value: "private, no-store" },

@@ -160,7 +160,7 @@ export default function RentmateApp() {
     return (
       <main className="login">
         <div className="brand">
-          <img className="mark" src="/rentmate-logo.png" alt="" width={40} height={40} />
+          <img className="mark" src="/rentmate-brand-v1.webp" alt="" width={40} height={40} fetchPriority="high" />
           Rentmate
         </div>
         <p className="muted">Getting things ready…</p>
@@ -172,7 +172,7 @@ export default function RentmateApp() {
       <main className="login">
         <div className="login-card">
           <div className="brand">
-            <img className="mark" src="/rentmate-logo.png" alt="" width={40} height={40} />
+            <img className="mark" src="/rentmate-brand-v1.webp" alt="" width={40} height={40} fetchPriority="high" />
             Rentmate
           </div>
           <h1>{needsPassword ? "Make it yours." : "Welcome home."}</h1>
@@ -694,7 +694,7 @@ export default function RentmateApp() {
     <div className={owner ? "app owner" : "app renter"}>
       <aside className="sidebar">
         <div className="brand">
-          <img className="mark" src="/rentmate-logo.png" alt="" width={40} height={40} />
+          <img className="mark" src="/rentmate-brand-v1.webp" alt="" width={40} height={40} fetchPriority="high" />
           Rentmate
         </div>
         <p className="property">{view.settings.property_name}</p>
@@ -753,23 +753,6 @@ export default function RentmateApp() {
                 selected
               )}
             </h1>
-            <p className="muted">
-              {selected === "Overview"
-                ? "Everything you need to keep rent running smoothly."
-                : selected === "Home"
-                  ? "Make yourself at home. Your rent is right here."
-                  : selected === "Renters"
-                    ? "The people who make your place a home."
-                    : selected === "Rooms"
-                      ? "A place for everyone. Room to keep track."
-                      : selected === "Payments"
-                        ? "Every payment, with a clear record."
-                        : selected === "Bills"
-                          ? "Choose the month you want to settle."
-                          : selected === "Reports"
-                            ? "A simple view of your monthly rent."
-                            : "The details that make this place yours."}
-            </p>
           </div>
           {owner && selected === "Overview" && (
             <button className="button primary" onClick={() => pay()}>

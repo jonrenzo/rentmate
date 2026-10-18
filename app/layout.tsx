@@ -4,7 +4,10 @@ export const metadata: Metadata = {
   title: "Rentmate",
   description: "A little more clarity. A lot less paperwork.",
   manifest: "/manifest.webmanifest",
-  icons: { icon: "/rentmate-logo.png", apple: "/rentmate-logo.png" },
+  icons: {
+    icon: { url: "/rentmate-favicon-v1.png", sizes: "48x48", type: "image/png" },
+    apple: { url: "/rentmate-apple-v1.png", sizes: "180x180", type: "image/png" },
+  },
   appleWebApp: { capable: true, title: "Rentmate", statusBarStyle: "default" },
 };
 export const viewport: Viewport = {

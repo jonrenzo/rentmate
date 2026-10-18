@@ -45,13 +45,27 @@ textarea {
 }
 button {
   cursor: pointer;
+  transition:
+    transform 120ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out;
 }
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-button:active {
+button:active:not(:disabled) {
   transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .button.primary:hover:not(:disabled) {
+    background-color: #0057ad;
+    border-color: #0057ad;
+  }
+  .icon-button:hover:not(:disabled) {
+    background-color: #e5e5eb;
+  }
 }
 button,
 a {
@@ -216,9 +230,6 @@ small {
   align-items: center;
   gap: 24px;
   margin-bottom: 35px;
-}
-.page-head .muted {
-  margin-top: 12px;
 }
 .eyebrow {
   font-size: 10px;
@@ -639,10 +650,6 @@ footer span {
   font-size: 30px;
   letter-spacing: -1px;
 }
-.renter .page-head .muted {
-  font-size: 12px;
-  margin-top: 10px;
-}
 .renter .eyebrow {
   font-size: 9px;
   margin-bottom: 8px;
@@ -751,6 +758,28 @@ dialog {
 dialog::backdrop {
   background: #22223745;
   backdrop-filter: blur(4px);
+}
+dialog[open] {
+  animation: dialog-enter 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+dialog[open]::backdrop,
+.notice,
+.error {
+  animation: feedback-enter 150ms ease-out;
+}
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes feedback-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .dialog-head {
   display: flex;
@@ -944,9 +973,6 @@ dd {
   h1 {
     font-size: 30px;
   }
-  .page-head .muted {
-    font-size: 12px;
-  }
   .metrics {
     padding: 20px 0;
     gap: 0;
@@ -992,5 +1018,11 @@ dd {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+  dialog::backdrop {
+    animation: none !important;
+  }
+  button:active:not(:disabled) {
+    transform: none;
   }
 }

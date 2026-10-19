@@ -35,6 +35,8 @@ import {
 import { pesos } from "@/lib/input";
 import { FormDialog, type FormSpec, type Field, str } from "./forms";
 import { PaymentMethod } from "./payment-method";
+import { BankDetails } from "./bank-details";
+import { formatBankDetails, parseBankDetails } from "@/lib/bank-details";
 async function request(url: string, body?: unknown): Promise<any> {
   const response = await fetch(url, {
     method: body ? "POST" : "GET",
@@ -1187,9 +1189,9 @@ export default function RentmateApp() {
                     <dd>{view.settings.gcash_name || "Not set"}</dd>
                     <dt>GCash number</dt>
                     <dd>{view.settings.gcash_number || "Not set"}</dd>
-                    <dt>Bank details</dt>
-                    <dd>{view.settings.bank_details || "Not set"}</dd>
                   </dl>
+                  <h3>Bank transfer</h3>
+                  <BankDetails value={view.settings.bank_details} />
                   <div className="button-row">
                     <button
                       className="button"
@@ -1215,10 +1217,29 @@ export default function RentmateApp() {
                               required: false,
                             },
                             {
-                              name: "bank_details",
-                              label: "Bank transfer instructions",
+                              name: "bank_name",
+                              label: "Bank",
+                              value: parseBankDetails(view.settings.bank_details).bank,
+                              required: false,
+                            },
+                            {
+                              name: "bank_account_name",
+                              label: "Bank account name",
+                              value: parseBankDetails(view.settings.bank_details).accountName,
+                              hint: "Enter the account holder's name exactly as registered with the bank.",
+                              required: false,
+                            },
+                            {
+                              name: "bank_account_number",
+                              label: "Bank account number",
+                              value: parseBankDetails(view.settings.bank_details).accountNumber,
+                              required: false,
+                            },
+                            {
+                              name: "bank_notes",
+                              label: "Additional bank transfer instructions",
                               type: "textarea",
-                              value: view.settings.bank_details,
+                              value: parseBankDetails(view.settings.bank_details).notes,
                               required: false,
                             },
                           ],
@@ -1227,7 +1248,12 @@ export default function RentmateApp() {
                             property_name: str(d, "property_name"),
                             gcash_name: str(d, "gcash_name"),
                             gcash_number: str(d, "gcash_number"),
-                            bank_details: str(d, "bank_details"),
+                            bank_details: formatBankDetails({
+                              bank: str(d, "bank_name"),
+                              accountName: str(d, "bank_account_name"),
+                              accountNumber: str(d, "bank_account_number"),
+                              notes: str(d, "bank_notes"),
+                            }),
                           }),
                         )
                       }

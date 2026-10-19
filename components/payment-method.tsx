@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Copy, Download, Landmark, Wallet } from "lucide-react";
+import { BankDetails } from "./bank-details";
+import { parseBankDetails } from "@/lib/bank-details";
 
 type PaymentDetails = {
   gcash_name: string;
@@ -15,6 +17,7 @@ export function PaymentMethod({ settings }: { settings: PaymentDetails }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const bank = parseBankDetails(settings.bank_details);
   const qrUrl = settings.gcash_qr_path
     ? `/api/file?path=${encodeURIComponent(settings.gcash_qr_path)}`
     : null;
@@ -76,8 +79,10 @@ export function PaymentMethod({ settings }: { settings: PaymentDetails }) {
         </h3>
         {method === "bank" ? (
           <>
-            <p>{settings.bank_details.trim() || "Bank details haven't been added. Ask the owner before transferring."}</p>
-            <p className="fine">Use these bank details for your transfer, then submit the bank reference number and payment screenshot below.</p>
+            <BankDetails value={settings.bank_details} />
+            <p className="fine">{bank.bank && bank.accountName && bank.accountNumber
+              ? "Check the recipient's account name before transferring, then submit the bank reference number and payment screenshot below."
+              : "Bank details are incomplete. Ask the owner to confirm the missing details before transferring."}</p>
           </>
         ) : (
           <>

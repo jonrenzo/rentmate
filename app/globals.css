@@ -884,6 +884,33 @@ fieldset {
   font-weight: 600;
   user-select: text;
 }
+.bank-details dl {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  margin: 16px 0;
+}
+.bank-details dt:not(:first-child) {
+  margin-top: 14px;
+}
+.bank-details dt {
+  font-size: 11px;
+}
+.bank-details dd {
+  font-size: 15px;
+  font-weight: 600;
+}
+.bank-account-number {
+  font-variant-numeric: tabular-nums;
+  user-select: text;
+}
+.bank-notes {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  overflow-wrap: anywhere;
+}
+.bank-notes p {
+  white-space: pre-wrap;
+}
 .qr {
   display: block;
   width: 160px;

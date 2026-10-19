@@ -449,6 +449,8 @@ small {
   margin-top: 28px;
 }
 .table-wrap {
+  /* Keep absolutely positioned screen-reader labels inside the table scroller. */
+  position: relative;
   overflow: auto;
 }
 table {
@@ -953,11 +955,15 @@ dd {
   }
   .owner .sidebar nav {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding: 4px;
     margin-top: 17px;
     gap: 4px;
   }
   .owner .sidebar nav button {
+    flex: 0 0 auto;
     padding: 10px;
     gap: 6px;
     white-space: nowrap;

@@ -136,8 +136,19 @@ small {
 .owner {
   display: grid;
   grid-template-columns: 224px minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
   height: 100dvh;
-  overflow: hidden;
+  overflow: clip;
+}
+.owner > .sidebar,
+.owner > .workspace {
+  min-width: 0;
+  max-width: 100%;
+}
+.owner > .workspace {
+  margin: 0;
+  overflow-x: hidden;
 }
 .sidebar {
   background: #fbfbfc;
@@ -330,7 +341,7 @@ small {
 }
 .columns {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   gap: 24px;
 }
 .panel {
@@ -897,7 +908,7 @@ dd {
     grid-template-columns: 190px minmax(0, 1fr);
   }
   .columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .metrics > div {
     padding: 0 20px;
@@ -915,10 +926,8 @@ dd {
 }
 @media (max-width: 700px) {
   .owner {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    overflow: hidden;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
   }
   .owner .sidebar {
     padding: 18px 20px 8px;
@@ -959,7 +968,6 @@ dd {
   }
   .owner .workspace {
     padding: 24px 18px;
-    flex: 1;
     min-height: 0;
     height: auto;
     overflow-y: auto;
@@ -1014,7 +1022,7 @@ dd {
 
 
   .card-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .renter .sidebar-bottom {
     top: 24px;

@@ -866,6 +866,24 @@ fieldset {
   margin: 9px 0;
   white-space: pre-wrap;
 }
+.payment-instructions {
+  border-color: #b8d2ee;
+  background: #edf4fc;
+  margin: 0 0 18px;
+}
+.payment-instructions h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  color: var(--blue);
+  font-size: 14px;
+}
+.payment-number {
+  font-size: 18px;
+  font-weight: 600;
+  user-select: text;
+}
 .qr {
   display: block;
   width: 160px;

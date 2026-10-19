@@ -34,6 +34,7 @@ import {
 } from "@/lib/domain";
 import { pesos } from "@/lib/input";
 import { FormDialog, type FormSpec, type Field, str } from "./forms";
+import { PaymentMethod } from "./payment-method";
 async function request(url: string, body?: unknown): Promise<any> {
   const response = await fetch(url, {
     method: body ? "POST" : "GET",
@@ -392,20 +393,6 @@ export default function RentmateApp() {
       description: owner
         ? "Record a full payment you have already received."
         : "Transfer the full amount, then submit your proof. Your balance clears after the owner verifies it.",
-      content: !owner ? (
-        <div className="instructions">
-          {view.settings.gcash_qr_path && (
-            <img
-              className="qr"
-              src={imagePath(view.settings.gcash_qr_path)}
-              alt="Owner GCash payment QR"
-            />
-          )}
-          <strong>{view.settings.gcash_name || "GCash details not set"}</strong>
-          <p>{view.settings.gcash_number}</p>
-          {view.settings.bank_details && <p>{view.settings.bank_details}</p>}
-        </div>
-      ) : undefined,
       fields: [
         {
           name: "bill_id",
@@ -419,6 +406,7 @@ export default function RentmateApp() {
         {
           name: "method",
           label: "Payment method",
+          content: !owner ? <PaymentMethod settings={view.settings} /> : undefined,
           options: (owner ? ["cash", "gcash", "bank"] : ["gcash", "bank"]).map(
             (m) => ({
               value: m,

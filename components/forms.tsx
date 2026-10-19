@@ -12,6 +12,7 @@ export type Field = {
   max?: string;
   step?: string;
   hint?: string;
+  content?: ReactNode;
 };
 export type FormSpec = {
   title: string;
@@ -72,7 +73,9 @@ export function FormDialog({
         }}
       >
         <fieldset disabled={busy}>
-          {spec.fields.map((f) => (
+          {spec.fields.map((f) => f.content ? (
+            <div key={f.name}>{f.content}</div>
+          ) : (
             <label
               className={f.type === "checkbox" ? "check-field" : "field"}
               key={f.name}

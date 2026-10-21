@@ -731,6 +731,314 @@ footer span {
 }
 
 
+.splash {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: feedback-enter 250ms ease-out;
+}
+.splash-mark {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  box-shadow: 0 8px 24px #0066cc1a;
+}
+.splash-title {
+  margin-top: 24px;
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -1.4px;
+}
+.splash-tagline {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.splash-status {
+  margin-top: 40px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.splash-track {
+  width: 112px;
+  height: 3px;
+  margin: 0 auto 16px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+.splash-track::after {
+  content: "";
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue);
+  transform: translateX(75%);
+  animation: splash-loading 1.6s ease-in-out infinite;
+}
+@keyframes splash-loading {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(350%); }
+}
+.onboarding {
+  width: min(100%, 624px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 24px;
+}
+.onboarding-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.onboarding-header .brand {
+  font-size: 21px;
+}
+.onboarding-header .mark {
+  width: 32px;
+  height: 32px;
+}
+.onboarding-card {
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: white;
+}
+.onboarding-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+}
+.onboarding-steps li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.onboarding-steps span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--canvas);
+}
+.onboarding-steps [aria-current="step"] {
+  color: var(--blue);
+  font-weight: 700;
+}
+.onboarding-steps [aria-current="step"] span {
+  color: white;
+  background: var(--blue);
+}
+.onboarding-steps .complete span {
+  color: var(--green);
+  background: #edf5ef;
+}
+.onboarding-body {
+  min-height: 350px;
+  overflow-wrap: anywhere;
+}
+.onboarding-mascot {
+  display: block;
+  border-radius: 18px;
+  margin-bottom: 20px;
+}
+.onboarding-body h1 {
+  font-size: 28px;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+}
+.onboarding-intro {
+  color: var(--muted);
+  margin-top: 12px;
+  font-size: 15px;
+}
+.onboarding-rent {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #b8d2ee;
+  color: var(--ink);
+  background: #f3f7fc;
+  border-radius: 16px;
+}
+.onboarding-rent strong,
+.onboarding-receipt > strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 34px;
+  font-weight: 650;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+.onboarding-rent > span {
+  display: block;
+  font-size: 14px;
+}
+.onboarding-rent .onboarding-card-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--blue);
+  border-top: 1px solid #d9e5f3;
+  margin-top: 18px;
+  padding-top: 16px;
+  font-weight: 600;
+}
+.onboarding-reveal {
+  margin-top: 18px;
+  font-size: 16px;
+}
+.onboarding-practice {
+  width: fit-content;
+  margin-top: 18px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--canvas);
+  color: var(--muted);
+  font-size: 12px;
+}
+.onboarding-methods {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 24px 0;
+}
+.onboarding-methods label {
+  position: relative;
+  cursor: pointer;
+}
+.onboarding-methods input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.onboarding-methods span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.onboarding-methods input:checked + span {
+  background: #edf4fc;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.onboarding-methods input:focus-visible + span {
+  outline: 3px solid #78b5f4;
+  outline-offset: 3px;
+}
+.onboarding-prompt {
+  font-size: 14px;
+  margin: 16px 0;
+}
+.onboarding-proof {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 2px dashed #b8d2ee;
+  border-radius: 14px;
+  background: #f8fafd;
+  color: var(--blue);
+  padding: 24px 16px;
+  text-align: center;
+}
+.onboarding-proof span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.onboarding-proof:disabled {
+  opacity: 1;
+  border-style: solid;
+}
+.onboarding-cash,
+.onboarding-receipt {
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--canvas);
+  border-radius: 16px;
+  margin: 24px 0;
+}
+.onboarding-cash svg {
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+.onboarding-cash h2 {
+  font-size: 18px;
+}
+.onboarding-cash p,
+.onboarding-receipt p {
+  font-size: 14px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+.onboarding-receipt > svg {
+  color: #9c6e1c;
+}
+.onboarding-receipt.is-approved > svg {
+  color: var(--green);
+}
+.onboarding-receipt .badge {
+  font-size: 13px;
+  margin: 8px 0;
+}
+.onboarding-skip {
+  display: block;
+  margin: 12px auto 0;
+  min-height: 44px;
+  padding: 10px 16px;
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+.onboarding-actions .primary {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  white-space: normal;
+}
+.onboarding-actions svg {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .onboarding { padding: 20px 16px; }
+  .onboarding-card { padding: 24px 20px; }
+  .onboarding-steps { gap: 8px; }
+  .onboarding-steps li { flex-direction: column; gap: 6px; }
+  .onboarding-body { min-height: 0; }
+  .onboarding-body h1 { font-size: 27px; }
+}
 .login {
   min-height: 100dvh;
   display: flex;

@@ -14,7 +14,7 @@ function makeState(role: Role = 'owner'): AppState {
     {id:'miguel',username:'miguel',full_name:'Miguel Santos',phone:'0917 000 0102',role:'renter',must_change_password:false},
     {id:'isabel',username:'isabel',full_name:'Isabel Cruz',phone:'0917 000 0103',role:'renter',must_change_password:false},
   ];
-  let state:AppState={viewer:{...profiles[role==='owner'?0:1]},profiles,rooms:[
+  let state:AppState={viewer:{...profiles[role==='owner'?0:1]},onboarding_required:false,profiles,rooms:[
     {id:'room-101',name:'Room 101',capacity:2,notes:'Ground floor · courtyard side'},
     {id:'room-102',name:'Room 102',capacity:1,notes:'Ground floor'},
     {id:'room-201',name:'Room 201',capacity:2,notes:'Second floor · balcony'},

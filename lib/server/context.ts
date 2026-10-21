@@ -28,7 +28,7 @@ export async function actor(allowTemporary=false) {
  const authValidAfter=profile.auth_valid_after as string;
  delete profile.auth_valid_after;
  if(profile.must_change_password && !allowTemporary) throw new ApiError(428,'Change your temporary password first.');
- return {client,db,profile:profile as Profile,authValidAfter};
+ return {client,db,profile:profile as Profile,authValidAfter,user};
 }
 export function owner(profile:Profile) { if(profile.role!=='owner') throw new ApiError(403,'Owner access required.'); }
 export async function route(fn:()=>Promise<unknown>) {

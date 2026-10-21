@@ -36,6 +36,7 @@ import { pesos } from "@/lib/input";
 import { FormDialog, type FormSpec, type Field, str } from "./forms";
 import { PaymentMethod } from "./payment-method";
 import { BankDetails } from "./bank-details";
+import { RenterOnboarding } from "./renter-onboarding";
 import { formatBankDetails, parseBankDetails } from "@/lib/bank-details";
 async function request(url: string, body?: unknown): Promise<any> {
   const response = await fetch(url, {
@@ -71,6 +72,7 @@ export default function RentmateApp() {
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [passwordGate, setPasswordGate] = useState(false),
+    [showGuide, setShowGuide] = useState(false),
     [setup, setSetup] = useState(false),
     [modal, setModal] = useState<FormSpec | null>(null),
     [month, setMonth] = useState(""),
@@ -159,14 +161,35 @@ export default function RentmateApp() {
   function imagePath(path: string) {
     return `/api/file?path=${encodeURIComponent(path)}`;
   }
+  async function signOut() {
+    await request("/api/auth/logout", {});
+    setState(null);
+    setNotice("");
+    setError("");
+    setModal(null);
+    setPage("Overview");
+    setPasswordGate(false);
+    setShowGuide(false);
+  }
   if (loading)
     return (
-      <main className="login">
-        <div className="brand">
-          <img className="mark" src="/rentmate-brand-v1.webp" alt="" width={40} height={40} fetchPriority="high" />
-          Rentmate
+      <main className="splash" aria-busy="true">
+        <div className="splash-content">
+          <img
+            className="splash-mark"
+            src="/rentmate-brand-v1.webp"
+            alt=""
+            width={96}
+            height={96}
+            fetchPriority="high"
+          />
+          <h1 className="splash-title">Rentmate</h1>
+          <p className="splash-tagline">Your rent, all in one place.</p>
+          <div className="splash-status" role="status">
+            <div className="splash-track" aria-hidden="true" />
+            <p>Getting things ready…</p>
+          </div>
         </div>
-        <p className="muted">Getting things ready…</p>
       </main>
     );
   const needsPassword = passwordGate || state?.viewer.must_change_password;
@@ -245,6 +268,21 @@ export default function RentmateApp() {
         </div>
         {modal && <FormDialog spec={modal} close={() => setModal(null)} />}
       </main>
+    );
+  if (state.viewer.role === "renter" && (state.onboarding_required || showGuide))
+    return (
+      <RenterOnboarding
+        key={state.viewer.id}
+        state={state}
+        signOut={signOut}
+        complete={async () => {
+          if (state.onboarding_required) await request("/api/onboarding", {});
+          setState({ ...state, onboarding_required: false });
+          setShowGuide(false);
+          setNotice("");
+          setPage("Home");
+        }}
+      />
     );
   const view = state;
   const owner = state.viewer.role === "owner";
@@ -714,13 +752,7 @@ export default function RentmateApp() {
             aria-label="Sign out"
             onClick={async () => {
               try {
-                await request("/api/auth/logout", {});
-                setState(null);
-                setNotice("");
-                setError("");
-                setModal(null);
-                setPage("Overview");
-                setPasswordGate(false);
+                await signOut();
               } catch (e: any) {
                 setError(e.message);
               }
@@ -1318,6 +1350,11 @@ export default function RentmateApp() {
                 <button className="button" onClick={changePassword}>
                   Change password
                 </button>
+                {!owner && mine?.status === "active" && (
+                  <button className="button" onClick={() => setShowGuide(true)}>
+                    Getting started
+                  </button>
+                )}
                 <button
                   className="button"
                   onClick={async () => {

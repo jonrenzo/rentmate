@@ -36,6 +36,12 @@ npm run bootstrap-owner -- --username owner --recover
 
 Recovery preserves all records, invalidates earlier application sessions and requires another password change. If a renter reset fails midway, retry from the owner interface; the account remains gated until a successful reset and password change.
 
+## Renter onboarding
+
+After the owner creates an account, the renter signs in with their temporary password and sets a new one. Active renters then try a short interactive tour: tap their rent card to reveal the due date, choose a payment method, attach sample proof and see pending/approved examples. Cash has its own example. Practice never sends a payment or uploads a file. Renters can skip the tour or reopen it from **Account → Getting started**. Completion is saved to the signed-in account across devices.
+
+Existing active renters see the guide once when they next sign in. Owners and moved-out renters skip it. The completion preference uses Supabase Auth user metadata and does not control access to records; no database migration is needed.
+
 ## Local Supabase (optional)
 
 Docker and the Supabase CLI are required. The committed `supabase/config.toml` disables signup. Run `supabase start`, then `supabase db reset` **only against the disposable local stack**. Reset erases that local database. Use the local URL/keys shown by the CLI in `.env.local`, then bootstrap an owner. Never use reset against valuable data. This stack was not run in this environment because Docker was unavailable.
